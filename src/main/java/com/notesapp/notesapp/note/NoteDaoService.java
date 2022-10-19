@@ -42,5 +42,26 @@ public class NoteDaoService {
 		Predicate<? super Note> predicate = note -> note.getId()==id;
 		return notes.removeIf(predicate);
 	}
+	
+	
+	public Note update(Note upNote,long noteID)
+	{
+		//Predicate<? super Note> predicate = note -> note.getId()==upNote.getId();
+		Note oldNote = null;
+		for(Note singleNote: notes)
+		{
+			if(singleNote.getId()==noteID)
+			{
+				oldNote=singleNote;
+			}
+		}
+		
+		
+		oldNote.UpdateValues(upNote);
+		
+		return oldNote;
+		
+		
+	}
 
 }

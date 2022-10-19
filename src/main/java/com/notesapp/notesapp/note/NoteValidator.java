@@ -21,6 +21,13 @@ public class NoteValidator {
 			return;
 		}
 		
+		if(ValidatePriority(note.getPriority()))
+		{
+			validationResult=false;
+			validationReport="Invalid Priority Value";
+			return;
+		}
+		
 		validationResult=true;
 	}
 	
@@ -36,6 +43,19 @@ public class NoteValidator {
 		}else {
 			return false;
 		}
+	}
+	
+	public Boolean ValidatePriority(String priorityRank)
+	{
+		NotePriority[] priorities= NotePriority.values();
+		for(NotePriority pri: priorities)
+		{
+			if(pri.toString().equals(priorityRank))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public Boolean getValidationResult() {

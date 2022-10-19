@@ -103,6 +103,15 @@ public class Note {
 	public void setActualDateOfCompletion(LocalDate actualDateOfCompletion) {
 		this.actualDateOfCompletion = actualDateOfCompletion;
 	}
+	
+	public void UpdateValues(Note newNote) {
+		this.title=newNote.getTitle();
+		this.text=newNote.getText();
+		this.actualDateOfCompletion=newNote.getActualDateOfCompletion();
+		this.priority=newNote.getPriority();
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "Note [id=" + id + ", title=" + title + ", text=" + text + ", date=" + date

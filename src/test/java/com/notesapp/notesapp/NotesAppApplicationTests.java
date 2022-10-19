@@ -78,6 +78,13 @@ class NotesAppApplicationTests {
 		assertEquals(HttpStatus.BAD_REQUEST, urgentNote.getStatusCode());
 	}
 	
+	void notePatch_InvalidMemberChanges_ReturnsInvalidRequest()
+	{
+		ResponseEntity<Note> updatedNote= repository.updateNote(1,new Note(0, "Test Title", "Test Desc", LocalDate.now().plusDays(1), null, null, "Corre puto"));
+		
+		assertEquals(HttpStatus.BAD_REQUEST, updatedNote.getStatusCode());
+				
+	}
 	
 	
 	
