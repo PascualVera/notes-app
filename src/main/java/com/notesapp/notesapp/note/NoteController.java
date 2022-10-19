@@ -6,11 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import jakarta.validation.Valid;
+
 
 @RestController
 public class NoteController {
@@ -23,24 +28,55 @@ public class NoteController {
 		//Link
 		//Mentions
 		//Priority
-	static List<Note> notes = new ArrayList<Note>();
+	//static List<Note> notes = new ArrayList<Note>();
 	
-	static {notes.add(new Note(0, "Note1", "Text1",null, null, null, null, null));}
-	
+	private NoteDaoService service;
+	public NoteController(NoteDaoService service)
+	{
+		this.service=service;
+	}
 	
 	@PostMapping(path = "/notes")
-	public ResponseEntity<Note> postNote(@RequestBody Note note) {
-		notes.add(note);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(note.getId())
-				.toUri();
-		return ResponseEntity.created(location).build();
+	public ResponseEntity<Note> postNote( @RequestBody Note note) {
+		//Note Validation
+		NoteValidator validator=new NoteValidator();
+		validator.ValidateNote(note);
+		
+		if(validator.getValidationResult())
+		{
+			Note savedNote= service.save(note);
+			
+			URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+					.path("/{id}")
+					.buildAndExpand(savedNote.getId())
+					.toUri();
+			return ResponseEntity.created(location).build();
+		}
+		
+		
+		return ResponseEntity.badRequest().build();
+		
+		
 		
 	}
 	
 	@GetMapping(path = "/notes")
 	public List<Note> getAllNotes(){
-		return notes;
+		return service.findAll();
 	}
+	
+	@DeleteMapping("/notes/{id}")
+	public ResponseEntity<Boolean> deleteNote(@PathVariable int id)
+	{
+		Boolean deletionStatus=service.delete(id);
+		if(deletionStatus)
+		{
+			return ResponseEntity.ok().build();
+		}
+		
+		return ResponseEntity.notFound().build();
+		
+	}
+	
+	
 }

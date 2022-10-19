@@ -8,16 +8,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.http.HttpStatus;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 import com.notesapp.notesapp.note.Note;
 import com.notesapp.notesapp.note.NoteController;
+import com.notesapp.notesapp.note.NoteDaoService;
 
 import org.junit.jupiter.api.Assertions;
 
+
+@RunWith(SpringRunner.class)
+//@SpringBootTest
 @SpringBootTest
+//@ContextConfiguration(classes = { NoteController.class, ValidationAutoConfiguration.class})
 class NotesAppApplicationTests {
 	
 	//Note parameter
@@ -32,18 +43,38 @@ class NotesAppApplicationTests {
 	
 	//Testing notes null or empty
 	List<Note> nullOrEmptyNotes = new ArrayList<Note>();
-	
-	NoteController repository = new NoteController();
+	//NoteDaoService service=new NoteDaoService();
+	@Autowired
+	private NoteController repository;
 	
 	@Test
 	void noteCreation_SomeValueIsNullOrEmpty_ReturnInvalidInput() {
 		
-		ResponseEntity<Note> nullNote = repository.postNote(new Note(0, null, null, null, null, null, null, null));
-		ResponseEntity<Note> emptyNote = repository.postNote(new Note(0, "", "", LocalDate.now(),  LocalDate.now(), "", "", ""));
+		ResponseEntity<Note> nullNote = repository.postNote(new Note(0, null, null, null, null, null, null));
+		ResponseEntity<Note> emptyNote = repository.postNote(new Note(0, "", "",  LocalDate.now(), "", "", ""));
 		
-		assertEquals(emptyNote.getStatusCode(), HttpStatus.BAD_REQUEST);
+		assertEquals(HttpStatus.BAD_REQUEST, nullNote.getStatusCode());
 		
 	}
+	
+	@Test
+	void noteCreation_EstimatedDateBeforeCreatedDate_ReturnInvalidRequest()
+	{
+		ResponseEntity<Note> timeTravelNote = repository.postNote(new Note(0, "Test Title", "Test Desc", LocalDate.now().minusDays(1), null, null, null));
+		
+		assertEquals(HttpStatus.BAD_REQUEST, timeTravelNote.getStatusCode());
+	}
+	
+	@Test
+	void noteDeletion_NonExistantID_ReturnNotFound() {
+		ResponseEntity<Boolean> noteToDeleteID=repository.deleteNote(-1);
+		
+		assertEquals(HttpStatus.NOT_FOUND, noteToDeleteID.getStatusCode());
+	}
+	
+	
+	
+	
 	
 
 

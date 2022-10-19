@@ -1,6 +1,12 @@
 package com.notesapp.notesapp.note;
 
 import java.time.LocalDate;
+/*
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.PositiveOrZero;
+*/
 
 public class Note {
 	//Note parameter
@@ -12,25 +18,33 @@ public class Note {
 	//Link
 	//Mentions
 	//Priority
-	
+	//@PositiveOrZero(message=("ID Should not be Empty or Negative"))
 	private long id;
+	//@Size(min=2, message=("Title Should not be Empty"))
+	//@NotNull
 	private String title;
+	//@Size(min=1, message=("Text Should not be Empty"))
+	//@NotNull
 	private String text;
 	private LocalDate date;
-	private LocalDate dateOfCompletion;
+	//@FutureOrPresent(message=("Expected dat of Completion should be in the future."))
+	//@NotNull
+	private LocalDate estimatedDateOfCompletion;
+	private LocalDate actualDateOfCompletion;
 	private String Link;
 	private String mentions;
+	//@Size(min=1, message=("Priority Should not be Empty"))
 	private String priority;
 	
 	
-	public Note(long id, String title, String text, LocalDate date, LocalDate dateOfCompletion, String link,
+	public Note(long id, String title, String text, LocalDate estimatedDateOfCompletion, String link,
 			String mentions, String priority) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.text = text;
-		this.date = date;
-		this.dateOfCompletion = dateOfCompletion;
+		this.date = LocalDate.now();
+		this.estimatedDateOfCompletion = estimatedDateOfCompletion;
 		Link = link;
 		this.mentions = mentions;
 		this.priority = priority;
@@ -59,12 +73,6 @@ public class Note {
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
-	public LocalDate getDateOfCompletion() {
-		return dateOfCompletion;
-	}
-	public void setDateOfCompletion(LocalDate dateOfCompletion) {
-		this.dateOfCompletion = dateOfCompletion;
-	}
 	public String getLink() {
 		return Link;
 	}
@@ -83,11 +91,26 @@ public class Note {
 	public void setPriority(String priority) {
 		this.priority = priority;
 	}
+	public LocalDate getEstimatedDateOfCompletion() {
+		return estimatedDateOfCompletion;
+	}
+	public void setEstimatedDateOfCompletion(LocalDate estimatedDateOfCompletion) {
+		this.estimatedDateOfCompletion = estimatedDateOfCompletion;
+	}
+	public LocalDate getActualDateOfCompletion() {
+		return actualDateOfCompletion;
+	}
+	public void setActualDateOfCompletion(LocalDate actualDateOfCompletion) {
+		this.actualDateOfCompletion = actualDateOfCompletion;
+	}
 	@Override
 	public String toString() {
-		return "Note [id=" + id + ", title=" + title + ", text=" + text + ", date=" + date + ", dateOfCompletion="
-				+ dateOfCompletion + ", Link=" + Link + ", mentions=" + mentions + ", priority=" + priority + "]";
+		return "Note [id=" + id + ", title=" + title + ", text=" + text + ", date=" + date
+				+ ", estimatedDateOfCompletion=" + estimatedDateOfCompletion + ", actualDateOfCompletion="
+				+ actualDateOfCompletion + ", Link=" + Link + ", mentions=" + mentions + ", priority=" + priority + "]";
 	}
+	
+	
 	
 	
 }
