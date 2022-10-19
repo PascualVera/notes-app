@@ -35,8 +35,6 @@ public class Note {
 		this.mentions = mentions;
 		this.priority = priority;
 	}
-	
-	
 	public long getId() {
 		return id;
 	}
@@ -85,7 +83,6 @@ public class Note {
 	public void setPriority(String priority) {
 		this.priority = priority;
 	}
-	
 	@Override
 	public String toString() {
 		return "Note [id=" + id + ", title=" + title + ", text=" + text + ", date=" + date + ", dateOfCompletion="
