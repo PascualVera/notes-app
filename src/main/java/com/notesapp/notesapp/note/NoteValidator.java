@@ -1,5 +1,7 @@
 package com.notesapp.notesapp.note;
 
+import java.time.LocalDate;
+
 public class NoteValidator {
 
 	private Boolean validationResult;
@@ -13,7 +15,11 @@ public class NoteValidator {
 			return;
 		}
 		
-		
+		if(validateDate(note.getEstimatedDateOfCompletion())) {
+			validationResult=false;
+			validationReport="Time travel issues";
+			return;
+		}
 		
 		validationResult=true;
 	}
@@ -24,6 +30,13 @@ public class NoteValidator {
 		return title == null || title.trim().isEmpty();
 	}
 	
+	public Boolean validateDate(LocalDate date) {
+		if (date.isBefore(LocalDate.now()) ) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	
 	public Boolean getValidationResult() {
 		return validationResult;

@@ -71,6 +71,13 @@ class NotesAppApplicationTests {
 		
 		assertEquals(HttpStatus.NOT_FOUND, noteToDeleteID.getStatusCode());
 	}
+	@Test 
+	void notePriority_NotValidInput_ReturnsInvalidRequest() { 
+		ResponseEntity<Note> urgentNote = repository.postNote(new Note(0, "Test Title", "Test Desc", LocalDate.now().plusDays(1), null, null, "Corre puto"));
+		
+		assertEquals(HttpStatus.BAD_REQUEST, urgentNote.getStatusCode());
+	}
+	
 	
 	
 	
